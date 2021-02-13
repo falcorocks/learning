@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+      - image: hello-image
+        name: hello
+        resources:
+          limits:
+            memory: "500M"
+            cpu: "1000m"
+        env:
+          - name: FLASK_ENV
+            value: "development"
+          - name: FLASK_DEBUG
+            value: "1"

@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+metadata:
+  name: skaffold-flask-example
+build:
+  artifacts:
+  - image: hello-image
+    context: hello
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - manifests/hello-deployment.yaml
+    - manifests/hello-service.yaml
