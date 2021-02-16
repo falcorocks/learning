@@ -1,0 +1,10 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+metadata:
+  name: client-server-pattern
+deploy:
+  kubectl:
+    manifests:
+    - redis-client.deployment.yaml
+    - redis-server.deployment.yaml
+    - redis-server.service.yaml
