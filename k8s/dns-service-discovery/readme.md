@@ -63,6 +63,11 @@ redis-server-svc --> redis-server
     PONG
     ```
 
+6. When you are done, destroy the cluster and its resources with
+    ```bash
+    $ k3d cluster delete learning-dns-service-discovery
+    ```
+
 ### Best practices & resources
 
 although there are alternative methods, using services to reach deployments is the recommended way to enable inter-pod communication. Likewise using a cluster wide dns resolver (like the one that comes by default with k3d) is the recommended way to enable service discovery. Notice that I did not create a service for the redis-client deployment, but only for the server.
