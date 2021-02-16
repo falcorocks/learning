@@ -48,11 +48,8 @@ redis-server-svc --> redis-server
 
 4. get a shell on the client
     ```bash
-    $ kubectl get pods | grep -o "redis-client-\w*-\w*"
-    # your pod name will be slightly different!
-    redis-client-58bf8d4994-2vqvg
-    $ kubectl exec -ti redis-client-58bf8d4994-2vqvg -- bash
-    # you will get a shell inside the container
+    $ kubectl exec -ti $(kubectl get pods | grep -o "redis-client-\w*-\w*" | head -1) -- bash
+    # you will get a shell inside the container, your container name will be slightly different
     $ root@redis-client-58bf8d4994-2vqvg:/data# 
     ```
 
