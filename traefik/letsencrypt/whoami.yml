@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+
+  whoami:
+    image: containous/whoami
+    networks:
+      - proxy
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.whoami.loadbalancer.server.port=80" # it seems you always need to give traefik a port so it 'notices' the service
+        - "traefik.http.routers.whoami.entrypoints=web-secured"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.127.0.0.1.nip.io`)"
+        - "traefik.http.routers.whoami.tls.certresolver=mytlschallenge"
+
+networks:
+  proxy:
+    external: true
