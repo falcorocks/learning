@@ -1,0 +1,13 @@
+# Dynamic configuration
+
+tls:
+   certificates:
+    - certFile: "/configuration/tls/127.0.0.1.nip.io+1.pem"
+      keyFile: "/configuration/tls/127.0.0.1.nip.io+1-key.pem"
+      stores:
+        - default
+   stores:
+      default:
+         defaultCertificate:
+            certFile: "/configuration/tls/127.0.0.1.nip.io+1.pem"
+            keyFile: "/configuration/tls/127.0.0.1.nip.io+1-key.pem"

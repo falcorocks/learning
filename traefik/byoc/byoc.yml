@@ -1,0 +1,41 @@
+version: "3.8"
+# https://traefik.io/blog/traefik-2-tls-101-23b4fbee81f1/
+
+services:
+  traefik:
+    image: traefik:v2.6
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.swarmMode=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=web-secured
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.web-secured.address=:443
+      - --providers.file.filename=/configuration/dyn.yml
+      - --providers.file.watch=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./configuration/:/configuration/
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.api.service=api@internal" # Let the dashboard access the traefik api
+        - "traefik.http.services.api.loadbalancer.server.port=443" # it seems you always need to give traefik a port so it 'notices' the service
+        - "traefik.http.routers.api.entrypoints=web-secured"
+        - "traefik.http.routers.api.rule=Host(`traefik.127.0.0.1.nip.io`)"
+        - "traefik.http.routers.api.tls=true"
+
+  whoami:
+    image: containous/whoami
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.whoami.loadbalancer.server.port=80" # it seems you always need to give traefik a port so it 'notices' the service
+        - "traefik.http.routers.whoami.entrypoints=web-secured"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.127.0.0.1.nip.io`)"
+        - "traefik.http.routers.whoami.tls=true"
